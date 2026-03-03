@@ -29,15 +29,18 @@ Vercel is the easiest way to deploy Next.js applications with automatic updates.
 ## Alternative Deployment Options
 
 ### Netlify
+
 1. Go to https://netlify.com
 2. Click "Sign up with GitHub"
 3. Authorize and select `markflow_project`
 4. Click "Deploy"
 
 ### GitHub Pages (Static Export)
+
 Requires modifying `next.config.js` to build as static site (loses some dynamic features).
 
 ### Self-Hosted (Node.js Required)
+
 - Railway.app (easy)
 - Heroku
 - AWS/Google Cloud
@@ -48,12 +51,15 @@ Requires modifying `next.config.js` to build as static site (loses some dynamic 
 ## After Deployment
 
 ### Share Your App
+
 Once deployed, share the Vercel URL with others. Your markdown note app will be live and accessible!
 
 ### Custom Domain (Optional)
+
 Both Vercel and Netlify allow connecting custom domains for free.
 
 ### Continuous Updates
+
 Just push changes to GitHub, and your deployed app updates automatically.
 
 ---
@@ -61,6 +67,7 @@ Just push changes to GitHub, and your deployed app updates automatically.
 ## Vercel Environment Variables (if needed)
 
 Create a `.env.local` file for local testing:
+
 ```
 NEXT_PUBLIC_API_URL=your-api-url
 ```

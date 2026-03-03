@@ -1,9 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import {
-  PerspectiveCamera,
-  OrbitControls,
-  Sphere,
-} from '@react-three/drei'
+import { PerspectiveCamera, OrbitControls, Sphere } from '@react-three/drei'
 import { useColorMode } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
