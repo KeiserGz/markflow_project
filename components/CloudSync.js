@@ -19,24 +19,39 @@ export default function CloudSync() {
       try {
         setSyncStatus('syncing')
         setIsLoading(true)
+        console.log('📤 Starting sync with timeout...')
 
         // Use browser storage key as user ID
         const userId = 'device-' + Date.now()
 
+        // Create a timeout promise that rejects after 10 seconds
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Sync timeout after 10 seconds')), 10000)
+        )
+
         // Sync each note to Firestore
-        for (const note of notes) {
+        const syncPromises = notes.map(async (note) => {
           try {
             const noteRef = doc(db, 'users', userId, 'notes', note.id)
-            await setDoc(noteRef, {
-              ...note,
-              syncedAt: new Date().toISOString(),
-            })
+            await Promise.race([
+              setDoc(noteRef, {
+                ...note,
+                syncedAt: new Date().toISOString(),
+              }),
+              timeoutPromise,
+            ])
+            console.log('✅ Synced note:', note.id)
           } catch (noteError) {
-            console.error('Error syncing note:', noteError)
+            console.error('❌ Error syncing note:', note.id, noteError?.message)
+            throw noteError
           }
-        }
+        })
+
+        // Wait for all notes to sync, but with overall timeout
+        await Promise.race([Promise.all(syncPromises), timeoutPromise])
 
         setSyncStatus('synced')
+        console.log('🎉 All notes synced successfully!')
 
         toast({
           title: 'Synced! ✅',
@@ -51,13 +66,20 @@ export default function CloudSync() {
           setIsLoading(false)
         }, 2000)
       } catch (error) {
-        console.error('Sync error:', error)
+        console.error('❌ Sync error:', error?.message || error)
         setSyncStatus('error')
         setIsLoading(false)
 
+        let description = error?.message || 'Unknown error'
+        if (description.includes('timeout')) {
+          description = 'Sync timeout - check if Firestore is enabled'
+        } else if (description.includes('permission')) {
+          description = 'Permission denied - check Firestore rules'
+        }
+
         toast({
           title: 'Sync Error ❌',
-          description: 'Make sure Firestore is enabled in Firebase Console',
+          description,
           status: 'error',
           duration: 4000,
         })
@@ -76,7 +98,7 @@ export default function CloudSync() {
 
   const handleCloudToggle = () => {
     console.log('🔘 Cloud button clicked! Current enabled:', cloudEnabled)
-    
+
     if (!cloudEnabled) {
       console.log('✅ Enabling cloud sync...')
       setCloudEnabled(true)
