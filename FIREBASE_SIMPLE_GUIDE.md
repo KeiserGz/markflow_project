@@ -22,15 +22,16 @@
 5. Copy the entire `firebaseConfig` object that appears
 
 It will look like this:
+
 ```javascript
 const firebaseConfig = {
-  apiKey: "AIzaS...your...key",
-  authDomain: "markflow-app.firebaseapp.com",
-  projectId: "markflow-app",
-  storageBucket: "markflow-app.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abc123def456"
-};
+  apiKey: 'AIzaS...your...key',
+  authDomain: 'markflow-app.firebaseapp.com',
+  projectId: 'markflow-app',
+  storageBucket: 'markflow-app.appspot.com',
+  messagingSenderId: '123456789',
+  appId: '1:123456789:web:abc123def456',
+}
 ```
 
 ---
@@ -43,14 +44,15 @@ const firebaseConfig = {
 4. Save the file
 
 **Example:**
+
 ```javascript
 const firebaseConfig = {
-  apiKey: "YOUR_ACTUAL_API_KEY_HERE",
-  authDomain: "your-actual-domain.firebaseapp.com",
-  projectId: "your-actual-project",
-  storageBucket: "your-actual-bucket.appspot.com",
-  messagingSenderId: "your-actual-id",
-  appId: "1:your:web:id"
+  apiKey: 'YOUR_ACTUAL_API_KEY_HERE',
+  authDomain: 'your-actual-domain.firebaseapp.com',
+  projectId: 'your-actual-project',
+  storageBucket: 'your-actual-bucket.appspot.com',
+  messagingSenderId: 'your-actual-id',
+  appId: '1:your:web:id',
 }
 ```
 
@@ -119,16 +121,19 @@ git push
 ## 🆘 Troubleshooting
 
 ### "Cloud button not working?"
+
 - Wait 5 minutes for Vercel to redeploy
 - Hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R)
 - Check browser console (F12) for errors
 
 ### "Data not appearing in Firestore?"
+
 - Make sure you clicked **"Publish"** on the rules
 - Check your Firebase config is correct
 - Try creating a new note after enabling cloud
 
 ### "Getting permission errors?"
+
 - Verify Firestore rules are exactly as shown above
 - Make sure test mode is enabled (Security Rules show permission denied = test mode active)
 
@@ -147,6 +152,7 @@ git push
 ## 🎉 You're All Set!
 
 Your notes are now:
+
 - ✅ Saving locally on your device
 - ✅ Auto-syncing to Firebase cloud
 - ✅ Working offline

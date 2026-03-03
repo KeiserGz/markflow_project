@@ -1,6 +1,7 @@
 # ✅ ULTRA SIMPLE Firebase Setup - Your App is READY!
 
 ## 🎉 Good News
+
 Your Firebase configuration is **ALREADY installed**! No coding needed.
 
 ---
@@ -8,10 +9,12 @@ Your Firebase configuration is **ALREADY installed**! No coding needed.
 ## 📱 All You Need to Do Now (2 clicks!)
 
 ### Step 1: Open Firebase Console
+
 **Click here:** https://console.firebase.google.com
 
 ### Step 2: Look for "markflow-app"
-You should see your project called **"markflow-app"** 
+
+You should see your project called **"markflow-app"**
 
 Click on it to open it.
 
@@ -27,7 +30,7 @@ You'll see a button: **"Create Database"**
 
 A popup appears. Don't change anything, just:
 
-1. Click **"Next"** 
+1. Click **"Next"**
 2. Choose **"Start in test mode"** (should be already selected)
 3. Click **"Enable"**
 

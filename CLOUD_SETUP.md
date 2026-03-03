@@ -24,12 +24,12 @@ Your notes can now auto-sync to the cloud! Follow these steps to set up Firebase
 
 ```javascript
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef123456",
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'your-project.firebaseapp.com',
+  projectId: 'your-project-id',
+  storageBucket: 'your-project.appspot.com',
+  messagingSenderId: '123456789',
+  appId: '1:123456789:web:abcdef123456',
 }
 ```
 
@@ -82,11 +82,13 @@ service cloud.firestore {
 ## Troubleshooting
 
 **"Cloud Sync Failed"?**
+
 - Check your Firebase config is correct
 - Verify Firestore rules are published
 - Check browser console for errors (F12)
 
 **No sync happening?**
+
 - Make sure cloud toggle is ON
 - Check network connection
 - Verify Firebase project exists
