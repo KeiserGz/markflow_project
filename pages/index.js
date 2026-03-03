@@ -161,16 +161,16 @@ export default function Home() {
             gap={4}
           >
             <HStack gap={4} flex={1}>
-              <Tooltip label="Toggle Sidebar">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  display={{ base: 'flex', md: 'none' }}
-                >
-                  <Icon as={FiMenu} />
-                </Button>
-              </Tooltip>
+              <Button
+                variant="ghost"
+                size="lg"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                display={{ base: 'flex', md: 'none' }}
+                p={2}
+                minW="auto"
+              >
+                <Icon as={FiMenu} boxSize={6} />
+              </Button>
               <VStack align="start" spacing={0}>
                 <Text
                   fontSize="xs"
