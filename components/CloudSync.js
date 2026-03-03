@@ -75,7 +75,10 @@ export default function CloudSync() {
   }, [cloudEnabled, notes, setSyncStatus, toast])
 
   const handleCloudToggle = () => {
+    console.log('🔘 Cloud button clicked! Current enabled:', cloudEnabled)
+    
     if (!cloudEnabled) {
+      console.log('✅ Enabling cloud sync...')
       setCloudEnabled(true)
       setSyncStatus('syncing')
       toast({
@@ -85,6 +88,7 @@ export default function CloudSync() {
         duration: 2000,
       })
     } else {
+      console.log('❌ Disabling cloud sync...')
       setCloudEnabled(false)
       setSyncStatus('idle')
       toast({
