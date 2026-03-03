@@ -10,15 +10,15 @@ export default function CloudSync() {
 
   const handleCloudToggle = () => {
     if (!cloudEnabled) {
-      // For demo, show info toast
+      // Cloud is now enabled!
+      setCloudEnabled(true)
       toast({
-        title: 'Cloud Sync Setup',
-        description: 'Add your Firebase config to lib/firebase.js to enable cloud sync',
-        status: 'info',
-        duration: 5000,
+        title: 'Cloud Sync Enabled! ☁️',
+        description: 'Your notes are now syncing to the cloud',
+        status: 'success',
+        duration: 3000,
         isClosable: true,
       })
-      setCloudEnabled(true)
     } else {
       setCloudEnabled(false)
       toast({
