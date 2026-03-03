@@ -48,6 +48,16 @@ export const useNoteStore = create(
     (set, get) => ({
       notes: [defaultNote],
       currentNoteId: defaultNote.id,
+      cloudEnabled: false,
+      syncStatus: 'idle',
+
+      setCloudEnabled: (enabled) => {
+        set({ cloudEnabled: enabled })
+      },
+
+      setSyncStatus: (status) => {
+        set({ syncStatus: status })
+      },
 
       addNote: () => {
         const newNote = {
