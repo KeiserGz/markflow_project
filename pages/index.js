@@ -33,6 +33,7 @@ import Editor from '../components/Editor'
 import Preview from '../components/Preview'
 import Canvas3D from '../components/Canvas3D'
 import Sidebar from '../components/Sidebar'
+import CloudSync from '../components/CloudSync'
 import { useNoteStore } from '../store/noteStore'
 import {
   FiMenu,
@@ -245,6 +246,9 @@ export default function Home() {
                   New
                 </Button>
               </Tooltip>
+
+              {/* Cloud Sync */}
+              <CloudSync />
 
               {/* Delete Button */}
               <Tooltip label="Delete Note">

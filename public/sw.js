@@ -1,9 +1,6 @@
 // Service Worker for MarkFlow PWA
 const CACHE_NAME = 'markflow-v1'
-const urlsToCache = [
-  '/',
-  '/manifest.json',
-]
+const urlsToCache = ['/', '/manifest.json']
 
 // Install event
 self.addEventListener('install', (event) => {
