@@ -131,7 +131,11 @@ export default function Home() {
             borderColor={borderColor}
             boxShadow="sm"
             overflowY="auto"
-            display={{ base: 'none', md: 'block' }}
+            zIndex={15}
+            position={{ base: 'fixed', md: 'relative' }}
+            h={{ base: '100vh', md: 'auto' }}
+            top={0}
+            left={0}
           >
             <Sidebar
               notes={notes}
@@ -159,15 +163,27 @@ export default function Home() {
             justifyContent="space-between"
             alignItems="center"
             gap={4}
+            position="relative"
+            zIndex={20}
+            pointerEvents="auto"
           >
-            <HStack gap={4} flex={1}>
+            <HStack gap={4} flex={1} pointerEvents="auto">
               <Button
                 variant="ghost"
                 size="lg"
                 onClick={() => setSidebarOpen(!sidebarOpen)}
+                onTouchStart={(e) => {
+                  e.preventDefault()
+                  setSidebarOpen(!sidebarOpen)
+                }}
                 display={{ base: 'flex', md: 'none' }}
-                p={2}
+                p={3}
                 minW="auto"
+                h="auto"
+                zIndex={25}
+                pointerEvents="auto"
+                _focus={{ outline: 'none' }}
+                _active={{ opacity: 0.7 }}
               >
                 <Icon as={FiMenu} boxSize={6} />
               </Button>
