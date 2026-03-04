@@ -8,11 +8,11 @@ function AnimatedSphere() {
   const meshRef = useRef(null)
 
   useEffect(() => {
-    if (!meshRef.current) return
-
     const animate = () => {
-      meshRef.current.rotation.x += 0.0005
-      meshRef.current.rotation.y += 0.0003
+      if (meshRef.current) {
+        meshRef.current.rotation.x += 0.0005
+        meshRef.current.rotation.y += 0.0003
+      }
       requestAnimationFrame(animate)
     }
 
@@ -25,8 +25,7 @@ function AnimatedSphere() {
       <meshStandardMaterial
         color="#0ea5e9"
         emissive="#0284c7"
-        metall
-        ness={0.7}
+        metalness={0.7}
         roughness={0.2}
         wireframe={false}
       />
@@ -36,6 +35,7 @@ function AnimatedSphere() {
 
 function FloatingParticles() {
   const particlesRef = useRef(null)
+  const geometryRef = useRef(null)
   const particleCount = 100
 
   useEffect(() => {
@@ -51,24 +51,30 @@ function FloatingParticles() {
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geometryRef.current = geometry
+    particlesRef.current.geometry = geometry
 
     const animations = setInterval(() => {
-      const positions = geometry.attributes.position.array
-      for (let i = 0; i < positions.length; i += 3) {
-        positions[i + 1] += 0.05
-        if (positions[i + 1] > 10) {
-          positions[i + 1] = -10
+      if (geometryRef.current?.attributes?.position?.array) {
+        const positions = geometryRef.current.attributes.position.array
+        for (let i = 0; i < positions.length; i += 3) {
+          positions[i + 1] += 0.05
+          if (positions[i + 1] > 10) {
+            positions[i + 1] = -10
+          }
         }
+        geometryRef.current.attributes.position.needsUpdate = true
       }
-      geometry.attributes.position.needsUpdate = true
     }, 50)
 
-    return () => clearInterval(animations)
+    return () => {
+      clearInterval(animations)
+      geometry.dispose()
+    }
   }, [])
 
   return (
     <points ref={particlesRef}>
-      <bufferGeometry attach="geometry" />
       <pointsMaterial
         attach="material"
         size={0.05}
