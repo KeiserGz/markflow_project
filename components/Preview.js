@@ -31,7 +31,11 @@ const components = {
     </Heading>
   ),
   p: ({ children }) => (
-    <Text mb={4} lineHeight="1.8" color={useColorModeValue('gray.900', 'gray.100')}>
+    <Text
+      mb={4}
+      lineHeight="1.8"
+      color={useColorModeValue('gray.900', 'gray.100')}
+    >
       {children}
     </Text>
   ),
@@ -42,6 +46,7 @@ const components = {
         py={1}
         borderRadius="md"
         bg={useColorModeValue('gray.100', 'gray.700')}
+        color={useColorModeValue('gray.900', 'gray.100')}
         fontSize="0.9em"
       >
         {children}
@@ -55,18 +60,23 @@ const components = {
         overflow="auto"
         mb={4}
       >
-        <Code fontSize="sm" fontFamily="'Fira Code', monospace">
+        <Code fontSize="sm" fontFamily="'Fira Code', monospace" color={useColorModeValue('gray.900', 'gray.100')}>
           {children}
         </Code>
       </Box>
     ),
   ul: ({ children }) => (
-    <Box as="ul" mb={4} pl={6} style={{ marginLeft: '1.5rem' }}>
+    <Box as="ul" mb={4} pl={6} style={{ marginLeft: '1.5rem' }} color={useColorModeValue('gray.900', 'gray.100')}>
       {children}
     </Box>
   ),
   li: ({ children }) => (
-    <Box as="li" mb={2} style={{ marginBottom: '0.5rem' }} color={useColorModeValue('gray.900', 'gray.100')}>
+    <Box
+      as="li"
+      mb={2}
+      style={{ marginBottom: '0.5rem' }}
+      color={useColorModeValue('gray.900', 'gray.100')}
+    >
       {children}
     </Box>
   ),
@@ -81,10 +91,25 @@ const components = {
       borderRadius="md"
       opacity={0.8}
     >
-      <Text fontStyle="italic" color={useColorModeValue('gray.900', 'gray.100')}>{children}</Text>
+      <Text
+        fontStyle="italic"
+        color={useColorModeValue('gray.900', 'gray.100')}
+      >
+        {children}
+      </Text>
     </Box>
   ),
   hr: () => <Divider my={6} />,
+  strong: ({ children }) => (
+    <Text as="strong" fontWeight="bold" color={useColorModeValue('gray.900', 'gray.100')}>
+      {children}
+    </Text>
+  ),
+  em: ({ children }) => (
+    <Text as="em" fontStyle="italic" color={useColorModeValue('gray.900', 'gray.100')}>
+      {children}
+    </Text>
+  ),
   a: ({ href, children }) => (
     <ChakraLink
       href={href}
@@ -99,6 +124,7 @@ const components = {
 
 export default function Preview({ markdown }) {
   const bgColor = useColorModeValue('white', 'gray.800')
+  const textColor = useColorModeValue('gray.900', 'gray.100')
 
   return (
     <MotionBox
@@ -109,8 +135,9 @@ export default function Preview({ markdown }) {
       h="100%"
       overflowY="auto"
       bg={bgColor}
+      color={textColor}
     >
-      <Box className="markdown-preview" maxW="2xl" mx="auto">
+      <Box className="markdown-preview" maxW="2xl" mx="auto" color={textColor}>
         <ReactMarkdown components={components} remarkPlugins={[remarkGfm]}>
           {markdown || '# Start typing to see the preview'}
         </ReactMarkdown>
