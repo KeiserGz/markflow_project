@@ -35,21 +35,14 @@ MarkFlow now includes email/password authentication with Firestore database inte
 
 1. In Firestore, go to **Rules** tab
 2. **Delete ALL existing rules** completely
-3. Replace with this - copy exactly:
+3. **For testing**, use these SIMPLE rules first:
 
 ```firestore
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /notes/{document=**} {
-      allow create: if request.auth != null &&
-                       request.resource.data.userId == request.auth.uid;
-      allow read: if request.auth != null &&
-                     resource.data.userId == request.auth.uid;
-      allow update: if request.auth != null &&
-                       resource.data.userId == request.auth.uid;
-      allow delete: if request.auth != null &&
-                       resource.data.userId == request.auth.uid;
+      allow read, write: if request.auth != null;
     }
   }
 }
@@ -57,7 +50,27 @@ service cloud.firestore {
 
 4. Click **Publish** button
 5. **Wait 60 seconds** (important - rules take time to propagate)
-6. Check browser console - error should be gone
+6. Test if notes sync now (check browser console)
+
+**If that works**, then use these SECURE rules:
+
+```firestore
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /notes/{document=**} {
+      allow create: if request.auth != null && 
+                       request.resource.data.userId == request.auth.uid;
+      allow read: if request.auth != null && 
+                     resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null && 
+                       resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && 
+                       resource.data.userId == request.auth.uid;
+    }
+  }
+}
+```
 
 ### 4. Test Locally
 

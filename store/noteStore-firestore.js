@@ -64,7 +64,8 @@ export const useNoteStore = create((set, get) => ({
             userFriendlyError =
               'Permission denied - Check Firestore setup in AUTH_SETUP.md'
           } else if (error.code === 'failed-precondition') {
-            userFriendlyError = 'Firestore database not created - See AUTH_SETUP.md'
+            userFriendlyError =
+              'Firestore database not created - See AUTH_SETUP.md'
           }
 
           set({ loading: false, error: userFriendlyError })

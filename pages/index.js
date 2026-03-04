@@ -36,6 +36,7 @@ import Canvas3D from '../components/Canvas3D'
 import Sidebar from '../components/Sidebar'
 import CloudSync from '../components/CloudSync'
 import ErrorBanner from '../components/ErrorBanner'
+import FirestoreDiagnostics from '../components/FirestoreDiagnostics'
 import ProtectedRoute from '../components/ProtectedRoute'
 import { useNoteStore } from '../store/noteStore-firestore'
 import { useAuthContext } from '../context/AuthContext'
@@ -130,7 +131,9 @@ function Home() {
     setExportFormat(format)
   }
 
-  return (Error Banner */}
+  return (
+    <Box minH="100vh" bg={useColorModeValue('gray.50', 'gray.900')}>
+      {/* Error Banner */}
       {error && showError && (
         <ErrorBanner
           error={error}
@@ -138,8 +141,13 @@ function Home() {
         />
       )}
 
-      {/* 
-    <Box minH="100vh" bg={useColorModeValue('gray.50', 'gray.900')}>
+      {/* Diagnostics when error occurs */}
+      {error && (
+        <Box p={4} maxW="800px" mx="auto" zIndex={20} position="relative">
+          <FirestoreDiagnostics />
+        </Box>
+      )}
+
       {/* 3D Canvas Background */}
       <Box position="fixed" top={0} left={0} right={0} bottom={0} zIndex={0}>
         <Canvas3D />
