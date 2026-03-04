@@ -49,7 +49,10 @@ function FloatingParticles() {
   }, [])
 
   useFrame(() => {
-    if (particlesRef.current?.geometry?.attributes?.position && positionsRef.current) {
+    if (
+      particlesRef.current?.geometry?.attributes?.position &&
+      positionsRef.current
+    ) {
       const positions = positionsRef.current
       for (let i = 1; i < positions.length; i += 3) {
         positions[i] += 0.05

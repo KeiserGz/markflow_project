@@ -17,9 +17,14 @@ export const useNoteStore = create((set, get) => ({
   currentNoteId: null,
   loading: false,
   userId: null,
+  error: null,
+
+  setError: (error) => {
+    set({ error })
+  },
 
   setUserId: (userId) => {
-    set({ userId })
+    set({ userId, error: null })
     // Load notes when userId is set
     if (userId) {
       get().loadNotes(userId)
@@ -31,29 +36,48 @@ export const useNoteStore = create((set, get) => ({
   loadNotes: (userId) => {
     if (!userId) return
 
-    set({ loading: true })
+    set({ loading: true, error: null })
 
     try {
       const q = query(collection(db, 'notes'), where('userId', '==', userId))
-      
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const notesList = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
 
-        set({ notes: notesList, loading: false })
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const notesList = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
 
-        // Set current note to first note if none selected
-        if (notesList.length > 0 && !get().currentNoteId) {
-          set({ currentNoteId: notesList[0].id })
+          set({ notes: notesList, loading: false, error: null })
+
+          // Set current note to first note if none selected
+          if (notesList.length > 0 && !get().currentNoteId) {
+            set({ currentNoteId: notesList[0].id })
+          }
+        },
+        (error) => {
+          console.error('Error loading notes:', error)
+          let userFriendlyError = 'Failed to load notes'
+
+          if (error.code === 'permission-denied') {
+            userFriendlyError =
+              'Permission denied - Check Firestore setup in AUTH_SETUP.md'
+          } else if (error.code === 'failed-precondition') {
+            userFriendlyError = 'Firestore database not created - See AUTH_SETUP.md'
+          }
+
+          set({ loading: false, error: userFriendlyError })
         }
-      })
+      )
 
       return unsubscribe
     } catch (error) {
       console.error('Error loading notes:', error)
-      set({ loading: false })
+      set({
+        loading: false,
+        error: 'Failed to load notes - Check console for details',
+      })
     }
   },
 
@@ -70,12 +94,20 @@ export const useNoteStore = create((set, get) => ({
       }
 
       const docRef = await addDoc(collection(db, 'notes'), newNote)
-      
+      set({ error: null })
       set({ currentNoteId: docRef.id })
-      
+
       return { id: docRef.id, ...newNote }
     } catch (error) {
       console.error('Error adding note:', error)
+      let userFriendlyError = 'Failed to create note'
+
+      if (error.code === 'permission-denied') {
+        userFriendlyError =
+          'Permission denied - Check Firestore rules in AUTH_SETUP.md'
+      }
+
+      set({ error: userFriendlyError })
       return null
     }
   },
@@ -89,8 +121,16 @@ export const useNoteStore = create((set, get) => ({
         ...updates,
         lastModified: serverTimestamp(),
       })
+      set({ error: null })
     } catch (error) {
       console.error('Error updating note:', error)
+      let userFriendlyError = 'Failed to update note'
+
+      if (error.code === 'permission-denied') {
+        userFriendlyError = 'Permission denied - Check Firestore rules'
+      }
+
+      set({ error: userFriendlyError })
     }
   },
 
@@ -99,7 +139,7 @@ export const useNoteStore = create((set, get) => ({
 
     try {
       await deleteDoc(doc(db, 'notes', noteId))
-      
+
       const notes = get().notes
       if (notes.length > 1) {
         const nextNote = notes.find((n) => n.id !== noteId)
@@ -107,8 +147,16 @@ export const useNoteStore = create((set, get) => ({
       } else {
         set({ currentNoteId: null })
       }
+      set({ error: null })
     } catch (error) {
       console.error('Error deleting note:', error)
+      let userFriendlyError = 'Failed to delete note'
+
+      if (error.code === 'permission-denied') {
+        userFriendlyError = 'Permission denied - Check Firestore rules'
+      }
+
+      set({ error: userFriendlyError })
     }
   },
 

@@ -35,6 +35,7 @@ import Preview from '../components/Preview'
 import Canvas3D from '../components/Canvas3D'
 import Sidebar from '../components/Sidebar'
 import CloudSync from '../components/CloudSync'
+import ErrorBanner from '../components/ErrorBanner'
 import ProtectedRoute from '../components/ProtectedRoute'
 import { useNoteStore } from '../store/noteStore-firestore'
 import { useAuthContext } from '../context/AuthContext'
@@ -66,11 +67,13 @@ function Home() {
     deleteNote,
     setCurrentNote,
     exportNote,
+    error,
   } = useNoteStore()
 
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [title, setTitle] = useState('')
   const [showPreview, setShowPreview] = useState(true)
+  const [showError, setShowError] = useState(true)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [exportFormat, setExportFormat] = useState('md')
 
@@ -127,7 +130,15 @@ function Home() {
     setExportFormat(format)
   }
 
-  return (
+  return (Error Banner */}
+      {error && showError && (
+        <ErrorBanner
+          error={error}
+          onClose={() => setShowError(false)}
+        />
+      )}
+
+      {/* 
     <Box minH="100vh" bg={useColorModeValue('gray.50', 'gray.900')}>
       {/* 3D Canvas Background */}
       <Box position="fixed" top={0} left={0} right={0} bottom={0} zIndex={0}>

@@ -65,7 +65,11 @@ export default function Signup() {
   }
 
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.50', 'gray.900')} position="relative">
+    <Box
+      minH="100vh"
+      bg={useColorModeValue('gray.50', 'gray.900')}
+      position="relative"
+    >
       {/* 3D Background */}
       <Box position="fixed" top={0} left={0} right={0} bottom={0} zIndex={0}>
         <Canvas3D />
