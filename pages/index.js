@@ -64,6 +64,7 @@ export default function Home() {
 
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [title, setTitle] = useState('')
+  const [showPreview, setShowPreview] = useState(true)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [exportFormat, setExportFormat] = useState('md')
 
@@ -272,12 +273,45 @@ export default function Home() {
             </HStack>
           </MotionBox>
 
+          {/* Mobile: Preview Toggle Buttons */}
+          <HStack
+            display={{ base: 'flex', lg: 'none' }}
+            spacing={0}
+            borderBottom="1px"
+            borderColor={borderColor}
+            bg={bgColor}
+            p={2}
+          >
+            <Button
+              flex={1}
+              variant={!showPreview ? 'solid' : 'ghost'}
+              size="sm"
+              onClick={() => setShowPreview(false)}
+              borderRadius="0"
+            >
+              Editor
+            </Button>
+            <Button
+              flex={1}
+              variant={showPreview ? 'solid' : 'ghost'}
+              size="sm"
+              onClick={() => setShowPreview(true)}
+              borderRadius="0"
+            >
+              Preview
+            </Button>
+          </HStack>
+
           {/* Editor and Preview */}
           <Grid
-            templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
+            templateColumns={{
+              base: showPreview ? '0fr' : '1fr',
+              lg: '1fr 1fr',
+            }}
             gap={0}
             flex={1}
             overflow="hidden"
+            transition="grid-template-columns 0.3s ease"
           >
             {/* Editor */}
             <MotionBox
@@ -285,8 +319,9 @@ export default function Home() {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
               overflowY="auto"
-              borderRight={{ base: 'none', lg: '1px solid' }}
+              borderRight="1px solid"
               borderColor={borderColor}
+              minW={0}
             >
               <Editor
                 value={currentNote?.content || ''}
@@ -299,8 +334,9 @@ export default function Home() {
               initial={{ x: 300, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              display={{ base: 'none', lg: 'block' }}
               overflowY="auto"
+              display={{ base: showPreview ? 'block' : 'none', lg: 'block' }}
+              minW={0}
             >
               <Preview markdown={currentNote?.content || ''} />
             </MotionBox>
