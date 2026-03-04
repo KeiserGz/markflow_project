@@ -3,6 +3,7 @@
 ## ✅ Quick Checklist - Make Sure You Did These:
 
 ### 1️⃣ Firebase Console Setup
+
 - [ ] Go to https://console.firebase.google.com
 - [ ] See your project "markflow-app"
 - [ ] Go to **Build** → **Firestore Database**
@@ -12,6 +13,7 @@
 - [ ] Wait for it to finish (1-2 minutes)
 
 ### 2️⃣ Firestore Security Rules
+
 - [ ] In Firestore, click **"Rules"** tab
 - [ ] You should see rules starting with `rules_version = '2';`
 - [ ] If not, paste this:
@@ -30,6 +32,7 @@ service cloud.firestore {
 - [ ] Click **"Publish"**
 
 ### 3️⃣ Test Your App
+
 1. Go to https://markflow-project.vercel.app
 2. Hard refresh (Ctrl+Shift+R or Cmd+Shift+R)
 3. Top right - look for **"Cloud: Off"** button
@@ -42,27 +45,35 @@ service cloud.firestore {
 ## 🆘 Troubleshooting
 
 ### Button doesn't click or respond
+
 **Solution:**
+
 - On mobile: Wait 2 seconds, click again
 - Try refreshing the page (F5)
 - Try a different browser
 
 ### Shows "Sync Error ❌"
+
 **This means:** Firestore database isn't set up correctly
 
 **Solution:**
+
 - [ ] Make sure you clicked **"Enable"** in Firestore
 - [ ] Check that database status shows **GREEN** (ready/online)
 - [ ] Verify rules are published (should show **Timestamp** in Rules tab)
 
 ### No "Cloud: Off" button visible
+
 **Solution:**
+
 - Refresh page (Ctrl+Shift+R)
 - Wait 2-3 minutes for Vercel to deploy
 - Check browser console (F12) for errors
 
 ### Data not appearing in Firestore
+
 **Solution:**
+
 1. Make sure button says **"Cloud: On"** (BLUE)
 2. Create a NEW note while cloud is ON
 3. Check Firestore Console:
@@ -75,6 +86,7 @@ service cloud.firestore {
 ## 📱 On Your Phone
 
 Same process:
+
 1. Open https://markflow-project.vercel.app
 2. Tap **"Cloud: Off"** button
 3. It turns **blue** → **"Cloud: On"**
@@ -87,6 +99,7 @@ Same process:
 ## ✨ When It's Working
 
 You'll see:
+
 - ✅ Button says **"Cloud: On"** (solid blue)
 - ✅ "Synced!" message appears briefly
 - ✅ Notes appear in Firestore Console
@@ -97,6 +110,7 @@ You'll see:
 ## Need More Help?
 
 Check the browser console for errors (F12):
+
 1. Press **F12** to open Developer Tools
 2. Click **Console** tab
 3. Look for red error messages

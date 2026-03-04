@@ -60,13 +60,23 @@ const components = {
         overflow="auto"
         mb={4}
       >
-        <Code fontSize="sm" fontFamily="'Fira Code', monospace" color={useColorModeValue('gray.900', 'gray.100')}>
+        <Code
+          fontSize="sm"
+          fontFamily="'Fira Code', monospace"
+          color={useColorModeValue('gray.900', 'gray.100')}
+        >
           {children}
         </Code>
       </Box>
     ),
   ul: ({ children }) => (
-    <Box as="ul" mb={4} pl={6} style={{ marginLeft: '1.5rem' }} color={useColorModeValue('gray.900', 'gray.100')}>
+    <Box
+      as="ul"
+      mb={4}
+      pl={6}
+      style={{ marginLeft: '1.5rem' }}
+      color={useColorModeValue('gray.900', 'gray.100')}
+    >
       {children}
     </Box>
   ),
@@ -101,12 +111,20 @@ const components = {
   ),
   hr: () => <Divider my={6} />,
   strong: ({ children }) => (
-    <Text as="strong" fontWeight="bold" color={useColorModeValue('gray.900', 'gray.100')}>
+    <Text
+      as="strong"
+      fontWeight="bold"
+      color={useColorModeValue('gray.900', 'gray.100')}
+    >
       {children}
     </Text>
   ),
   em: ({ children }) => (
-    <Text as="em" fontStyle="italic" color={useColorModeValue('gray.900', 'gray.100')}>
+    <Text
+      as="em"
+      fontStyle="italic"
+      color={useColorModeValue('gray.900', 'gray.100')}
+    >
       {children}
     </Text>
   ),

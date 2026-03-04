@@ -29,12 +29,15 @@ import {
   Flex,
 } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/router'
 import Editor from '../components/Editor'
 import Preview from '../components/Preview'
 import Canvas3D from '../components/Canvas3D'
 import Sidebar from '../components/Sidebar'
 import CloudSync from '../components/CloudSync'
-import { useNoteStore } from '../store/noteStore'
+import ProtectedRoute from '../components/ProtectedRoute'
+import { useNoteStore } from '../store/noteStore-firestore'
+import { useAuthContext } from '../context/AuthContext'
 import {
   FiMenu,
   FiSun,
@@ -44,14 +47,17 @@ import {
   FiUpload,
   FiTrash2,
   FiSave,
+  FiLogOut,
 } from 'react-icons/fi'
 
 const MotionBox = motion(Box)
 
 export default function Home() {
+  const router = useRouter()
   const { colorMode, toggleColorMode } = useColorMode()
   const bgColor = useColorModeValue('white', 'gray.800')
   const borderColor = useColorModeValue('gray.200', 'gray.700')
+  const { user, logout } = useAuthContext()
   const {
     notes,
     currentNoteId,
@@ -69,8 +75,8 @@ export default function Home() {
   const [exportFormat, setExportFormat] = useState('md')
 
   useEffect(() => {
-    if (notes.length === 0) {
-      addNote()
+    if (notes.length === 0 && user) {
+      addNote(user.uid)
     }
   }, [])
 
@@ -90,8 +96,18 @@ export default function Home() {
   }
 
   const handleNewNote = () => {
-    const newNote = addNote()
-    setCurrentNote(newNote.id)
+    if (user) {
+      addNote(user.uid)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      router.push('/login')
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
   }
 
   const handleDeleteCurrentNote = () => {
@@ -270,6 +286,19 @@ export default function Home() {
                   <Icon as={colorMode === 'light' ? FiMoon : FiSun} />
                 </Button>
               </Tooltip>
+
+              {/* Logout Button */}
+              <Tooltip label="Logout">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  colorScheme="red"
+                  leftIcon={<FiLogOut />}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </Tooltip>
             </HStack>
           </MotionBox>
 
@@ -408,3 +437,12 @@ export default function Home() {
     </Box>
   )
 }
+
+// Wrap Home component with ProtectedRoute
+const ProtectedHome = () => (
+  <ProtectedRoute>
+    <Home />
+  </ProtectedRoute>
+)
+
+export default ProtectedHome

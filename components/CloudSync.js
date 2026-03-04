@@ -26,7 +26,10 @@ export default function CloudSync() {
 
         // Create a timeout promise that rejects after 10 seconds
         const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Sync timeout after 10 seconds')), 10000)
+          setTimeout(
+            () => reject(new Error('Sync timeout after 10 seconds')),
+            10000
+          )
         )
 
         // Sync each note to Firestore

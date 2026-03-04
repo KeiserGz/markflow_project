@@ -2,6 +2,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { mode } from '@chakra-ui/theme-tools'
 import Head from 'next/head'
 import { useEffect } from 'react'
+import { AuthProvider } from '../context/AuthContext'
 
 const theme = extendTheme({
   config: {
@@ -96,7 +97,9 @@ function MyApp({ Component, pageProps }) {
         <title>MarkFlow - Markdown Note Editor</title>
       </Head>
       <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
       </ChakraProvider>
     </>
   )
