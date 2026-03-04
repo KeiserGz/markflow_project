@@ -31,7 +31,7 @@ const components = {
     </Heading>
   ),
   p: ({ children }) => (
-    <Text mb={4} lineHeight="1.8">
+    <Text mb={4} lineHeight="1.8" color={useColorModeValue('gray.900', 'gray.100')}>
       {children}
     </Text>
   ),
@@ -66,7 +66,7 @@ const components = {
     </Box>
   ),
   li: ({ children }) => (
-    <Box as="li" mb={2} style={{ marginBottom: '0.5rem' }}>
+    <Box as="li" mb={2} style={{ marginBottom: '0.5rem' }} color={useColorModeValue('gray.900', 'gray.100')}>
       {children}
     </Box>
   ),
@@ -81,7 +81,7 @@ const components = {
       borderRadius="md"
       opacity={0.8}
     >
-      <Text fontStyle="italic">{children}</Text>
+      <Text fontStyle="italic" color={useColorModeValue('gray.900', 'gray.100')}>{children}</Text>
     </Box>
   ),
   hr: () => <Divider my={6} />,
