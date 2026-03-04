@@ -52,7 +52,7 @@ import {
 
 const MotionBox = motion(Box)
 
-export default function Home() {
+function Home() {
   const router = useRouter()
   const { colorMode, toggleColorMode } = useColorMode()
   const bgColor = useColorModeValue('white', 'gray.800')
