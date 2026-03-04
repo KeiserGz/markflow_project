@@ -33,43 +33,46 @@ MarkFlow now includes email/password authentication with Firestore database inte
 
 ### 3. Set Firestore Security Rules
 
+**IMPORTANT: These rules match your code structure. Don't use rules from other guides.**
+
 1. In Firestore, go to **Rules** tab
 2. **Delete ALL existing rules** completely
-3. **For testing**, use these SIMPLE rules first:
+3. **First, use TEST rules** (permissive, for debugging):
 
 ```firestore
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /notes/{document=**} {
-      allow read, write: if request.auth != null;
+    // Allow ALL authenticated users (for testing only)
+    allow read, write: if request.auth != null;
+  }
+}
+```
+
+4. Click **Publish** → Wait 60 seconds
+5. Hard refresh app: **Ctrl+Shift+R**
+6. Try creating a note
+
+**If that works**, upgrade to PRODUCTION rules:
+
+```firestore
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /notes/{docId} {
+      allow create: if request.auth != null && 
+                       request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if request.auth != null && 
+                                     resource.data.userId == request.auth.uid;
     }
   }
 }
 ```
 
-4. Click **Publish** button
-5. **Wait 60 seconds** (important - rules take time to propagate)
-6. Test if notes sync now (check browser console)
-
-**If that works**, then use these SECURE rules:
-
-```firestore
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /notes/{document=**} {
-      allow create: if request.auth != null && 
-                       request.resource.data.userId == request.auth.uid;
-      allow read: if request.auth != null && 
-                     resource.data.userId == request.auth.uid;
-      allow update: if request.auth != null && 
-                       resource.data.userId == request.auth.uid;
-      allow delete: if request.auth != null && 
-                       resource.data.userId == request.auth.uid;
-    }
-  }
-}
+**Key difference:**
+- `allow create:` uses `request.resource.data` (the NEW document being created)
+- `allow read, update, delete:` uses `resource.data` (the existing document)
+This is critical for the rules to work!
 ```
 
 ### 4. Test Locally
@@ -220,6 +223,7 @@ The Firestore store:
    - If still getting errors, share the exact error message
 
 **Common mistakes:**
+
 - ❌ Typo in rules → Copy-paste exactly from AUTH_SETUP.md
 - ❌ Didn't click Publish → Click and wait for checkmark
 - ❌ Didn't wait 60 seconds → Wait before refreshing browser

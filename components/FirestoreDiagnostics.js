@@ -12,7 +12,14 @@ import {
 } from '@chakra-ui/react'
 import { useAuth } from '../hooks/useAuth'
 import { db } from '../lib/firebase'
-import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore'
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  where,
+  getDocs,
+} from 'firebase/firestore'
 
 export default function FirestoreDiagnostics() {
   const { user } = useAuth()
@@ -62,7 +69,10 @@ export default function FirestoreDiagnostics() {
 
       // Test 3: Try to read notes
       try {
-        const q = query(collection(db, 'notes'), where('userId', '==', user.uid))
+        const q = query(
+          collection(db, 'notes'),
+          where('userId', '==', user.uid)
+        )
         const snapshot = await getDocs(q)
         newResults.push({
           name: '✅ Read Permission (Notes)',
@@ -144,7 +154,9 @@ export default function FirestoreDiagnostics() {
                 bg={result.status.includes('✅') ? 'green.50' : 'red.50'}
                 borderRadius="md"
                 borderLeftWidth="4px"
-                borderLeftColor={result.status.includes('✅') ? 'green.500' : 'red.500'}
+                borderLeftColor={
+                  result.status.includes('✅') ? 'green.500' : 'red.500'
+                }
                 w="100%"
               >
                 <Text fontWeight="600" mb={1}>
@@ -177,8 +189,7 @@ export default function FirestoreDiagnostics() {
               ✅ All tests passing? Rules are correct.
               <br />
               ❌ Write test failing? Check Firestore rules (see AUTH_SETUP.md)
-              <br />
-              ❌ Read test failing? Check userId field on documents
+              <br />❌ Read test failing? Check userId field on documents
             </Text>
           </Box>
         </Alert>

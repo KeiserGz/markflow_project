@@ -34,7 +34,6 @@ import Editor from '../components/Editor'
 import Preview from '../components/Preview'
 import Canvas3D from '../components/Canvas3D'
 import Sidebar from '../components/Sidebar'
-import CloudSync from '../components/CloudSync'
 import ErrorBanner from '../components/ErrorBanner'
 import FirestoreDiagnostics from '../components/FirestoreDiagnostics'
 import ProtectedRoute from '../components/ProtectedRoute'
@@ -135,10 +134,7 @@ function Home() {
     <Box minH="100vh" bg={useColorModeValue('gray.50', 'gray.900')}>
       {/* Error Banner */}
       {error && showError && (
-        <ErrorBanner
-          error={error}
-          onClose={() => setShowError(false)}
-        />
+        <ErrorBanner error={error} onClose={() => setShowError(false)} />
       )}
 
       {/* Diagnostics when error occurs */}
@@ -282,9 +278,6 @@ function Home() {
                   New
                 </Button>
               </Tooltip>
-
-              {/* Cloud Sync */}
-              <CloudSync />
 
               {/* Delete Button */}
               <Tooltip label="Delete Note">

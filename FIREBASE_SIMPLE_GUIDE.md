@@ -83,8 +83,9 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userId}/notes/{document=**} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+    match /notes/{document=**} {
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
     }
   }
 }
@@ -119,6 +120,32 @@ git push
 ---
 
 ## 🆘 Troubleshooting
+
+### "Missing or insufficient permissions" Error?
+
+**This means your Firestore rules don't match where the code is writing.**
+
+**Fix:**
+
+1. Go to Firebase Console → Firestore → **Rules** tab
+2. **Delete everything** (clear all text)
+3. Copy-paste the exact rules from **Step 5️⃣** above
+4. Look for this line: `match /notes/{document=**} {`
+   - Make sure it says `/notes/` NOT `/users/{userId}/notes/`
+5. Click **Publish** (blue button)
+6. Wait **60 seconds**
+7. Go back to your app: **Hard refresh** (Ctrl+Shift+R)
+8. Try creating a new note
+
+The rules check:
+- For **creating** new notes: User is logged in AND note has their userId
+- For **reading/updating/deleting**: User is logged in AND note belongs to them
+
+If error persists after 60 seconds:
+1. Check browser console (F12) for error details
+2. Verify rules were published (green checkmark should appear)
+3. Try hard refresh: Ctrl+Shift+R
+4. Make sure you're logged in with same account
 
 ### "Cloud button not working?"
 
