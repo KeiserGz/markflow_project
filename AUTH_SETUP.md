@@ -34,23 +34,30 @@ MarkFlow now includes email/password authentication with Firestore database inte
 ### 3. Set Firestore Security Rules
 
 1. In Firestore, go to **Rules** tab
-2. Replace all rules with this:
+2. **Delete ALL existing rules** completely
+3. Replace with this - copy exactly:
 
 ```firestore
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can only read/write their own notes
     match /notes/{document=**} {
-      allow read, write: if request.auth.uid == resource.data.userId ||
-                          request.auth.uid == request.resource.data.userId;
-      allow create: if request.auth.uid == request.resource.data.userId;
+      allow create: if request.auth != null &&
+                       request.resource.data.userId == request.auth.uid;
+      allow read: if request.auth != null &&
+                     resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null &&
+                       resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null &&
+                       resource.data.userId == request.auth.uid;
     }
   }
 }
 ```
 
-3. Click **Publish**
+4. Click **Publish** button
+5. **Wait 60 seconds** (important - rules take time to propagate)
+6. Check browser console - error should be gone
 
 ### 4. Test Locally
 
@@ -163,42 +170,47 @@ The Firestore store:
 
 ## Troubleshooting
 
-### "Permission denied - check Firestore rules"
+### "Permission denied" or "Missing or insufficient permissions"
 
-This error appears when Firestore rejects write/read requests. **Follow these steps:**
+**This means Firestore rules are not set correctly.** Follow these steps EXACTLY:
 
-1. **Has Firestore database been created?**
-   - Go to [Firebase Console](https://console.firebase.google.com)
+1. **Go to Firebase Console**
+   - https://console.firebase.google.com
    - Select `markflow-app` project
-   - Go to **Firestore Database**
-   - If you see "Create Database", click it and finish setup
-   - Choose **Production mode**, select region `us-central1`, click **Create**
+   - Click **Firestore Database** (left sidebar)
+   - Click **Rules** tab
 
-2. **Are security rules published?**
-   - In Firebase Console → **Firestore Database** → **Rules** tab
-   - Copy-paste the rules from **Step 3** above
-   - Click **Publish** (must see checkmark)
-   - Wait 30 seconds for rules to propagate
+2. **Clear ALL rules completely**
+   - Select all text (Ctrl+A)
+   - Delete everything
+   - Editor should be empty
 
-3. **Check Browser Console for Details**
-   - Press `F12` to open DevTools
-   - Go to **Console** tab
-   - Look for red error messages
-   - Share the full error message if stuck
+3. **Paste NEW rules (copy exactly from Step 3 above)**
+   - Copy the rules block from **Step 3: Set Firestore Security Rules**
+   - Paste into Rules editor
+   - Check for typos
 
-4. **Try These Steps in Order**
-   - ✅ Verify database was created
-   - ✅ Publish rules and wait 30 seconds
-   - ✅ Hard refresh browser (Ctrl+Shift+R or Cmd+Shift+R)
-   - ✅ Clear browser cache/cookies
-   - ✅ Try signing up with new account
-   - ✅ Check Firebase quota hasn't been exceeded
+4. **Publish and Wait**
+   - Click big blue **Publish** button
+   - Wait until you see green checkmark
+   - **Wait 60 seconds** (rules don't apply instantly)
 
-5. **Still Not Working?**
-   - Check Firebase free tier limits aren't exceeded
-   - Ensure Email/Password auth is enabled (Step 1)
-   - Try in incognito/private browser window
-   - Check browser console (F12 → Console) for exact error code
+5. **Refresh app**
+   - Press Ctrl+Shift+R (hard refresh)
+   - Log out and log back in
+   - Try creating a note
+
+6. **Check Browser Console**
+   - Press F12
+   - Go to Console tab
+   - Should see no red errors now
+   - If still getting errors, share the exact error message
+
+**Common mistakes:**
+- ❌ Typo in rules → Copy-paste exactly from AUTH_SETUP.md
+- ❌ Didn't click Publish → Click and wait for checkmark
+- ❌ Didn't wait 60 seconds → Wait before refreshing browser
+- ❌ Cached old rules → Hard refresh (Ctrl+Shift+R)
 
 ### "User not found" or "Wrong password"
 
