@@ -21,6 +21,17 @@ import { formatDistanceToNow } from 'date-fns'
 const MotionBox = motion(Box)
 const MotionButton = motion(Button)
 
+// Helper function to convert Firestore timestamp to Date
+const convertTimestamp = (timestamp) => {
+  if (!timestamp) return new Date()
+  // If it's a Firestore Timestamp, use toDate()
+  if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+    return timestamp.toDate()
+  }
+  // Otherwise, treat it as a Date or convert string to Date
+  return new Date(timestamp)
+}
+
 export default function Sidebar({
   notes,
   currentNoteId,
@@ -149,7 +160,7 @@ export default function Sidebar({
                       <Icon as={FiClock} boxSize={3} />
                       <Text>
                         {formatDistanceToNow(
-                          new Date(note.lastModified || note.createdAt),
+                          convertTimestamp(note.lastModified || note.createdAt),
                           {
                             addSuffix: true,
                           }
