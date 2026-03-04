@@ -303,15 +303,47 @@ export default function Home() {
           </HStack>
 
           {/* Editor and Preview */}
+          <Flex
+            display={{ base: 'flex', lg: 'none' }}
+            flex={1}
+            overflow="hidden"
+            flexDirection="column"
+          >
+            {/* Mobile: Editor or Preview (not both) */}
+            {!showPreview && (
+              <MotionBox
+                initial={{ x: -300, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                flex={1}
+                overflowY="auto"
+              >
+                <Editor
+                  value={currentNote?.content || ''}
+                  onChange={handleMarkdownChange}
+                />
+              </MotionBox>
+            )}
+            {showPreview && (
+              <MotionBox
+                initial={{ x: 300, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                flex={1}
+                overflowY="auto"
+              >
+                <Preview markdown={currentNote?.content || ''} />
+              </MotionBox>
+            )}
+          </Flex>
+
+          {/* Desktop: Split View */}
           <Grid
-            templateColumns={{
-              base: showPreview ? '0fr' : '1fr',
-              lg: '1fr 1fr',
-            }}
+            display={{ base: 'none', lg: 'grid' }}
+            templateColumns="1fr 1fr"
             gap={0}
             flex={1}
             overflow="hidden"
-            transition="grid-template-columns 0.3s ease"
           >
             {/* Editor */}
             <MotionBox
@@ -335,7 +367,6 @@ export default function Home() {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               overflowY="auto"
-              display={{ base: showPreview ? 'block' : 'none', lg: 'block' }}
               minW={0}
             >
               <Preview markdown={currentNote?.content || ''} />
