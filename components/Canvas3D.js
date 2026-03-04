@@ -1,4 +1,4 @@
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { PerspectiveCamera, OrbitControls, Sphere } from '@react-three/drei'
 import { useColorMode } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
@@ -7,18 +7,12 @@ import * as THREE from 'three'
 function AnimatedSphere() {
   const meshRef = useRef(null)
 
-  useEffect(() => {
-    const animate = () => {
-      if (meshRef.current) {
-        meshRef.current.rotation.x += 0.0005
-        meshRef.current.rotation.y += 0.0003
-      }
-      requestAnimationFrame(animate)
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.rotation.x += 0.0005
+      meshRef.current.rotation.y += 0.0003
     }
-
-    const id = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(id)
-  }, [])
+  })
 
   return (
     <Sphere ref={meshRef} args={[1, 64, 64]} scale={2}>
@@ -35,48 +29,41 @@ function AnimatedSphere() {
 
 function FloatingParticles() {
   const particlesRef = useRef(null)
-  const geometryRef = useRef(null)
-  const particleCount = 100
+  const positionsRef = useRef(null)
 
   useEffect(() => {
     if (!particlesRef.current) return
 
     const geometry = new THREE.BufferGeometry()
-    const positions = new Float32Array(particleCount * 3)
+    const positions = new Float32Array(100 * 3)
 
-    for (let i = 0; i < particleCount * 3; i += 3) {
+    for (let i = 0; i < 100 * 3; i += 3) {
       positions[i] = (Math.random() - 0.5) * 20
       positions[i + 1] = (Math.random() - 0.5) * 20
       positions[i + 2] = (Math.random() - 0.5) * 20
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    geometryRef.current = geometry
     particlesRef.current.geometry = geometry
-
-    const animations = setInterval(() => {
-      if (geometryRef.current?.attributes?.position?.array) {
-        const positions = geometryRef.current.attributes.position.array
-        for (let i = 0; i < positions.length; i += 3) {
-          positions[i + 1] += 0.05
-          if (positions[i + 1] > 10) {
-            positions[i + 1] = -10
-          }
-        }
-        geometryRef.current.attributes.position.needsUpdate = true
-      }
-    }, 50)
-
-    return () => {
-      clearInterval(animations)
-      geometry.dispose()
-    }
+    positionsRef.current = positions
   }, [])
+
+  useFrame(() => {
+    if (particlesRef.current?.geometry?.attributes?.position && positionsRef.current) {
+      const positions = positionsRef.current
+      for (let i = 1; i < positions.length; i += 3) {
+        positions[i] += 0.05
+        if (positions[i] > 10) {
+          positions[i] = -10
+        }
+      }
+      particlesRef.current.geometry.attributes.position.needsUpdate = true
+    }
+  })
 
   return (
     <points ref={particlesRef}>
       <pointsMaterial
-        attach="material"
         size={0.05}
         color="#0ea5e9"
         sizeAttenuation={true}
